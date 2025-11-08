@@ -1,4 +1,4 @@
-# AWS Lambda Function Serverless Email API with FastAPI & AWS Lambda
+# AWS Serverless Email API with FastAPI & AWS Lambda
 
 A production-ready, serverless email API service built with FastAPI and deployed on AWS Lambda. This service provides a simple HTTP endpoint for sending emails using SMTP, with built-in error handling and environment-based configuration.
 
