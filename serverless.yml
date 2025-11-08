@@ -1,0 +1,54 @@
+service: email-api
+
+provider:
+  name: aws
+  runtime: python3.9
+  region: ap-south-1
+  environment:
+    EMAIL: ${env:EMAIL}
+    PASSWORD: ${env:PASSWORD}
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - logs:CreateLogGroup
+        - logs:CreateLogStream
+        - logs:PutLogEvents
+      Resource: arn:aws:logs:*:*:*
+
+plugins:
+  - serverless-python-requirements
+  - serverless-wsgi
+  - serverless-offline
+
+package:
+  exclude:
+    - venv/**
+    - node_modules/**
+    - .git/**
+    - __pycache__/**
+    - .pytest_cache/**
+
+custom:
+  wsgi:
+    app: app.app
+    packRequirements: false
+  pythonRequirements:
+    dockerizePip: true
+    useDownloadCache: true
+    useStaticCache: true
+    slim: true
+    strip: false
+
+functions:
+  api:
+    handler: wsgi_handler.handler
+    events:
+      - http:
+          path: /
+          method: ANY
+          cors: true
+      - http:
+          path: /{proxy+}
+          method: ANY
+          cors: true
+
